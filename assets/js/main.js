@@ -84,37 +84,76 @@
     reveals.forEach(function (el) { io.observe(el); });
   }
 
-  /* ---------- Publication filters ---------- */
-  var filterBtns = document.querySelectorAll('.filter-btn');
+  /* ---------- Publication filters (type + first-author toggle) ---------- */
+  var filterBtns = document.querySelectorAll('.filter-btn[data-filter]');
+  var firstBtn = document.querySelector('[data-filter-first]');
   var groups = document.querySelectorAll('.pub-year-group');
+  var pubs = document.querySelectorAll('.pub');
   var emptyMsg = document.querySelector('.pub-empty');
+  var state = { type: 'all', firstOnly: false };
+
+  function matches(pub, type, firstOnly) {
+    return (type === 'all' || pub.getAttribute('data-type') === type) &&
+           (!firstOnly || pub.getAttribute('data-first') === 'true');
+  }
+
+  // Show how many entries each filter button would display.
+  function updateCounts() {
+    filterBtns.forEach(function (btn) {
+      var n = 0;
+      pubs.forEach(function (pub) {
+        if (matches(pub, btn.getAttribute('data-filter'), state.firstOnly)) n++;
+      });
+      var badge = btn.querySelector('.filter-count');
+      if (!badge) {
+        badge = document.createElement('span');
+        badge.className = 'filter-count';
+        btn.appendChild(badge);
+      }
+      badge.textContent = n;
+    });
+  }
+
+  function applyFilters() {
+    var anyVisible = false;
+    groups.forEach(function (group) {
+      var visibleInGroup = 0;
+      group.querySelectorAll('.pub').forEach(function (pub) {
+        var show = matches(pub, state.type, state.firstOnly);
+        pub.hidden = !show;
+        if (show) visibleInGroup++;
+      });
+      group.hidden = visibleInGroup === 0;
+      if (visibleInGroup) {
+        anyVisible = true;
+        group.classList.add('is-visible');
+      }
+    });
+    if (emptyMsg) emptyMsg.hidden = anyVisible;
+    updateCounts();
+  }
 
   filterBtns.forEach(function (btn) {
     btn.addEventListener('click', function () {
-      var filter = btn.getAttribute('data-filter');
+      state.type = btn.getAttribute('data-filter');
       filterBtns.forEach(function (b) {
         var on = b === btn;
         b.classList.toggle('is-active', on);
         b.setAttribute('aria-pressed', String(on));
       });
-
-      var anyVisible = false;
-      groups.forEach(function (group) {
-        var visibleInGroup = 0;
-        group.querySelectorAll('.pub').forEach(function (pub) {
-          var show = filter === 'all' || pub.getAttribute('data-type') === filter;
-          pub.hidden = !show;
-          if (show) visibleInGroup++;
-        });
-        group.hidden = visibleInGroup === 0;
-        if (visibleInGroup) {
-          anyVisible = true;
-          group.classList.add('is-visible');
-        }
-      });
-      if (emptyMsg) emptyMsg.hidden = anyVisible;
+      applyFilters();
     });
   });
+
+  if (firstBtn) {
+    firstBtn.addEventListener('click', function () {
+      state.firstOnly = !state.firstOnly;
+      firstBtn.classList.toggle('is-active', state.firstOnly);
+      firstBtn.setAttribute('aria-pressed', String(state.firstOnly));
+      applyFilters();
+    });
+  }
+  updateCounts();
 
   /* ---------- BibTeX toggle + copy ---------- */
   document.querySelectorAll('.bib-toggle').forEach(function (btn) {

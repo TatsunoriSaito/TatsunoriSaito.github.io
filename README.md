@@ -33,23 +33,26 @@ Search `index.html` for `TODO` and `[` / `20XX` / `YOUR_`. In particular:
 
 ### Adding a publication
 
-Copy an existing `<li class="pub">` inside the right year group (or copy a whole `.pub-year-group` for a new year):
+Copy an existing `<li class="pub">` inside the right year group (or copy a whole `.pub-year-group` for a new year). Within a year, entries are ordered journal → international → domestic.
 
 ```html
-<li class="pub" data-type="journal">          <!-- journal | conference | preprint -->
-  <span class="pub-venue-badge badge-journal">Journal</span>
+<li class="pub" data-type="international" data-first="true">   <!-- journal | international | domestic -->
+  <span class="pub-venue-badge badge-international">Int’l Conf.</span>
   <div class="pub-main">
     <p class="pub-title">Paper title</p>
-    <p class="pub-authors"><span class="me">T. Saito</span>, A. Coauthor, and B. Advisor</p>
-    <p class="pub-venue"><em>IEEE Sensors Journal</em>, vol. X, pp. X–X, 2026.</p>
+    <p class="pub-authors"><span class="me">Tatsunori Saito</span>, Coauthor, and Takeshi Toda</p>
+    <p class="pub-venue"><em>Conference name</em>, P1-01, Nov. 2026.</p>
     <div class="pub-links">
-      <a href="https://doi.org/..." class="pub-link">DOI</a>
+      <a href="https://doi.org/..." class="pub-link" target="_blank" rel="noopener">DOI</a>
     </div>
   </div>
 </li>
 ```
 
-Add a `BibTeX` button plus a `<pre class="bibtex" hidden><code>…</code></pre>` (see the first entry) to get a toggle with a copy button.
+- `data-first="true"` marks first-authored papers (used by the “First-authored only” filter).
+- Japanese entries: add `lang="ja"` to the `<li>` and use `badge-domestic` / `Domestic`.
+- Optional extras: `<span class="pub-status">Under review</span>` after the title, `<p class="pub-award">…</p>` for an award, and a `BibTeX` button with `<pre class="bibtex" hidden><code>…</code></pre>` (see the IEEE TRS entry).
+- Filter counts update automatically.
 
 ### Changing the accent color
 
