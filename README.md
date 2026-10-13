@@ -64,3 +64,24 @@ Edit `--accent`, `--accent-hover`, `--accent-soft`, and `--accent-line` at the t
 python3 -m http.server 8000
 # open http://localhost:8000
 ```
+
+## Private analytics
+
+Pageview collection uses GoatCounter through `assets/js/analytics.js` on the home
+and 404 pages. Collection is disabled until `endpoint` is configured, and only
+runs on `tatsunorisaito.github.io`, so local previews do not send visits.
+
+1. Register a site at https://www.goatcounter.com/.
+2. In GoatCounter settings, restrict **Dashboard viewable by** to logged-in users
+   and leave **Allow adding visitor counts on your website** disabled. Dashboard
+   privacy is enforced by GoatCounter, not by this repository.
+3. Set `endpoint` in `assets/js/analytics.js` to the registered site's
+   `https://YOURCODE.goatcounter.com/count` URL, then commit and push.
+4. Visit the published website and check for the visit in the signed-in
+   dashboard. In a signed-out browser, verify that the dashboard does not expose
+   statistics.
+
+The collection URL is public; never commit passwords, API keys, or dashboard
+secret tokens. No visitor counter is displayed on the website. Page paths are
+recorded without query strings or fragments. Ad blockers may prevent counting;
+visits before setup cannot be recovered by this integration.
