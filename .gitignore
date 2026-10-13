@@ -1,0 +1,11 @@
+# Local source images and generation notes (published versions are JPEG/WebP).
+/assets/img/profile.jpg
+/assets/img/research/README.md
+/assets/img/research/contactless-vital-sign-monitoring.png
+/assets/img/research/healthcare-daily-life-monitoring.png
+/assets/img/research/learning-based-radar-signal-processing.png
+/assets/img/research/mmwave-human-sensing.png
+
+# Unused placeholders; remove these rules when publishing these files.
+/assets/img/profile-placeholder.svg
+/assets/cv/Tatsunori_Saito_CV.pdf
